@@ -1,0 +1,5 @@
+pytorch-lightning==1.5.0
+torchtext==0.4.0
+rouge_score
+sacrebleu
+transformers==4.18.0
