@@ -325,61 +325,49 @@ def add_args(parser):
         "--output_dir",
         default="",
         type=str,
-        help="The output directory where the model predictions and checkpoints will be written.",
     )
 
     generic_group.add_argument(
         "--fp16",
         action="store_true",
-        help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit",
     )
 
     generic_group.add_argument(
         "--fp16_opt_level",
         type=str,
-        default="O2",
-        help="For fp16: Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']."
-             "See details at https://nvidia.github.io/apex/amp.html",
+        default="O2"
     )
 
     generic_group.add_argument(
         "--max_grad_norm",
         default=1.0,
         type=float,
-        help="Max gradient norm"
     )
     generic_group.add_argument(
         "--do_train",
         action="store_true",
-        
-        help="Whether to run training. 如果只是做测试，需要把model_name_or_path给成已经finetnue好的模型"
     )
     generic_group.add_argument(
         "--do_predict",
         default=True,
         action="store_true",
-        help="Whether to run predictions on the test set."
     )
     generic_group.add_argument(
         "--gradient_accumulation_steps",
         type=int,
         default=1,   
-        help="Number of updates steps to accumulate before performing a backward/update pass.",
     )
     generic_group.add_argument(
         "--seed",
         type=int,
         default=42,
-        help="random seed for initialization"
     )
-
     task_group = parser.add_argument_group("task-specific parameters")
     task_group.add_argument(
         "--tuning_mode",
         type=str,
         choices=["pt1", "pt2"],
-        help="pt1: prefix-tuning; pt2: 加载pretrain模型的参数，和pt-1模型的参数",
-        default="pt2"
+        default="pt1"
     )
     task_group.add_argument(
         "--eval_type",
@@ -392,7 +380,6 @@ def add_args(parser):
         "--mid_dim",
         type=int,
         default=128,
-        help="prefix model 重参数化的中间矩阵"
     )
     prefix_group.add_argument(
         "--prefix_dropout",
