@@ -152,7 +152,6 @@ def pickle_save(obj, path):
 
 
 def freeze_params(model, unfreeze: List = None):
-    """unfreeze是不需要冻结的参数"""
 
     for name, param in model.named_parameters():
         param.requires_grad = False

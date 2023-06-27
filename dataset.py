@@ -110,7 +110,6 @@ class LegacySeq2SeqDataset(AbstractSeq2SeqDataset):
         )
 
     def collate_fn(self, batch) -> Dict[str, torch.Tensor]:
-        """ 加载一个batch的数据  """
         input_ids = torch.stack([x["input_ids"] for x in batch])
         masks = torch.stack([x["attention_mask"] for x in batch])
         target_ids = torch.stack([x["labels"] for x in batch])
