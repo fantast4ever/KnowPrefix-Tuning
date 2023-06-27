@@ -74,16 +74,11 @@ def _parse_knowledge(obs, correct_first=False):
     obs_know = [k.strip() for k in obs.get('knowledge', '').split('\n')]
     obs_know = [k for k in obs_know if k]
 
-    
-    
-
     if correct_first:
         try:
             i = obs_know.index(checked_sentence)
         except ValueError:
-            
-            
-            
+
             i = 0
             obs_know[0] = checked_sentence
         obs_know[0], obs_know[i] = obs_know[i], obs_know[0]
@@ -195,9 +190,6 @@ def fix_missing_period(line):
 
 def data_generator(in_file, correct_first=False, keep_last_n=99999):
 
-    
-    
-
     examples = load_data(in_file)
     observation = None
 
@@ -232,8 +224,6 @@ def data_generator(in_file, correct_first=False, keep_last_n=99999):
 
         if 'text' in observation and observation['text'] is not None:
             next_text = observation['text'].lower()
-            
-            
             next_text = fix_missing_period(next_text)
             history_strings.append(next_text)
             users.append(0)

@@ -298,8 +298,6 @@ class PrefixDialogModule(BaseTransformer):
 
         self.val_metric = self.default_val_metric if self.hparams.val_metric is None else self.hparams.val_metric
 
-    """  数据准备  """
-
     def get_dataset(self, type_path) -> KnowledgeSeq2SeqDataset:
         n_obs = self.n_obs[type_path]
         max_target_length = self.target_lens[type_path]
@@ -587,13 +585,6 @@ class PrefixDialogModule(BaseTransformer):
         }
 
     def test_epoch_end(self, outputs):
-        """  Called at the end of a test epoch with the output of all test_steps.
-
-        outputs: 一个list，里面的每一个元素是 :meth:`test_step_end` or `test_step`的返回值
-
-        If you didn't define a :meth:`test_step`, this won't be called.
-
-        """
         output_dict = self.validation_epoch_end(outputs, prefix="test")
         self.preds = output_dict["preds"]
 

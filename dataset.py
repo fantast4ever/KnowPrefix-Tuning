@@ -4,8 +4,8 @@ import torch
 import json
 import linecache
 import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
+# nltk.download('punkt')
+# nltk.download('stopwords')
 
 from pathlib import Path
 from torch.utils.data import Dataset
