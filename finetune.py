@@ -200,13 +200,13 @@ def add_args(parser):
     model_group.add_argument(
         "--eval_beams",
         type=int,
-        default=1,
+        default=None,
         required=False,
     )
     model_group.add_argument(
         "--no_repeat_ngram_size",
         type=int,
-        default=1,
+        default=None,
         required=False,
     )
     model_group.add_argument(

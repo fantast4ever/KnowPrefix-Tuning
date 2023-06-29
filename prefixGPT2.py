@@ -139,6 +139,53 @@ class PrefixGPT2ForConditionalGeneration(GPT2LMHeadModel):
             "pref_key_padding_mask": kwargs["pref_key_padding_mask"] if "pref_key_padding_mask" in kwargs else None,
         }
 
+    @staticmethod
+    def _expand_inputs_for_generation(
+            input_ids: torch.LongTensor,
+            expand_size: int = 1,
+            is_encoder_decoder: bool = False,
+            attention_mask: Optional[torch.LongTensor] = None,
+            encoder_outputs: Optional[ModelOutput] = None,
+            **model_kwargs,
+    ) -> Tuple[torch.LongTensor, Dict[str, Any]]:
+        expanded_return_idx = (
+            torch.arange(input_ids.shape[0]).view(-1, 1).repeat(1, expand_size).view(-1).to(input_ids.device)
+        )
+        input_ids = input_ids.index_select(0, expanded_return_idx)
+
+        if ("pref_past_kv_list" in model_kwargs) and model_kwargs["pref_past_kv_list"]:
+            pref_past_kv_list = model_kwargs["pref_past_kv_list"]
+            for i, pref_past_kv_dict in enumerate(pref_past_kv_list):
+                assert "decoder" in pref_past_kv_dict
+                pref_past_kv_dec = pref_past_kv_dict["decoder"]
+                pref_past_kv_dec_key = pref_past_kv_dec["prefix_key"]
+                pref_past_kv_dec_key = pref_past_kv_dec_key.index_select(0, expanded_return_idx)
+                pref_past_kv_list[i]["decoder"]["prefix_key"] = pref_past_kv_dec_key
+
+                pref_past_kv_dec_value = pref_past_kv_dec["prefix_value"]
+                pref_past_kv_dec_value = pref_past_kv_dec_value.index_select(0, expanded_return_idx)
+                pref_past_kv_list[i]["decoder"]["prefix_value"] = pref_past_kv_dec_value
+
+        if "pref_key_padding_mask" in model_kwargs:
+            pref_key_padding_mask = model_kwargs["pref_key_padding_mask"]
+            model_kwargs["pref_key_padding_mask"] = pref_key_padding_mask.index_select(0, expanded_return_idx)
+
+        if "token_type_ids" in model_kwargs:
+            token_type_ids = model_kwargs["token_type_ids"]
+            model_kwargs["token_type_ids"] = token_type_ids.index_select(0, expanded_return_idx)
+
+        if attention_mask is not None:
+            model_kwargs["attention_mask"] = attention_mask.index_select(0, expanded_return_idx)
+
+        if is_encoder_decoder:
+            if encoder_outputs is None:
+                raise ValueError("If `is_encoder_decoder` is True, make sure that `encoder_outputs` is defined.")
+            encoder_outputs["last_hidden_state"] = encoder_outputs.last_hidden_state.index_select(
+                0, expanded_return_idx.to(encoder_outputs.last_hidden_state.device)
+            )
+            model_kwargs["encoder_outputs"] = encoder_outputs
+        return input_ids, model_kwargs
+
 
 class PrefixGPT2Model(GPT2Model):
     def __init__(self, config):
