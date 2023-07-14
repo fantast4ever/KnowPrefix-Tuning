@@ -19,7 +19,7 @@ We conduct experiments on Wizard of Wikipedia and CmuDog datasets.
 The data preprocessing procedure follows [PARLAI](https://parl.ai/).
 The processing details are under `parlai_wow` and `parlai_cmudog` folders.
 
-Accessing the processed datasets directly through the following links: WoW; CMU-DoG
+Accessing the processed datasets directly through the following links: [WoW](https://drive.google.com/drive/folders/12IZTV3IT6v8lxdhJAdQVd7sHZKglvF4K?usp=sharing); [CMU\-DoG](https://drive.google.com/drive/folders/18BNdV8jo9i8uOSRTURx8ytjUR_I-6P6T?usp=sharing)
 
 ---
 
@@ -32,7 +32,7 @@ In the second stage, a response generator generates a knowledgeable response gro
 
 **Stage 1: Knowledge Prefix Generation**
 <pre>
-export CUDA_VISIBLE_DEVICES=0,1,...
+export CUDA_VISIBLE_DEVICES=0
 MODEL="bart-large or gpt2-large"
 DATASET="wow or cmu_dog"
 python ../finetune.py \
@@ -62,7 +62,7 @@ python ../finetune.py \
 
 **Stage 2: Knowledgeable Response Generation:**
 <pre>
-export CUDA_VISIBLE_DEVICES=0,1,...
+export CUDA_VISIBLE_DEVICES=0
 MODEL="bart-large or gpt2-large"
 DATASET="wow or cmu_dog"
 python ../finetune.py \

@@ -273,9 +273,9 @@ class PrefixDialogModule(BaseTransformer):
 
         if not self.eval_type:
             self.target_lens = {
-                "train": self.hparams.n_train,
-                f"valid": self.hparams.n_val,
-                f"test": self.hparams.n_test,
+                "train": self.hparams.max_target_length,
+                f"valid": self.hparams.max_target_length,
+                f"test": self.hparams.max_target_length,
             }
         else:
 
